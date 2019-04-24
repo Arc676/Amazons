@@ -43,16 +43,43 @@ void swapPlayer(SquareState* player) {
 }
 
 int main(int argc, char* argv[]) {
+	printf("Game of the Amazons! Available under GPLv3.\n");
 	BoardState board;
-	Square wpos[4] = {
-		{3, 0}, {0, 3}, {0,6}, {3, 9}
-	};
-	Square bpos[4] = {
-		{6, 0}, {9, 3}, {9, 6}, {6, 9}
-	};
-	boardstate_init(&board, 4, 4, 10, 10, wpos, bpos);
+
+	printf("Use default settings? [Y/n]: ");
+	char def;
+	scanf("%c", &def);
+	if (def == 'n' || def == 'N') {
+		int wp, bp, bw, bh;
+		printf("Enter game properties [white pieces, black pieces, board width, board height]: ");
+		scanf("%d %d %d %d", &wp, &bp, &bw, &bh);
+		Square wpos[wp], bpos[bp];
+		for (int i = 0; i < wp; i++) {
+			printf("Enter starting location for white pawn #%d [x y]: ", i);
+			scanf("%d %d", &wpos[i].x, &wpos[i].y);
+		}
+		for (int i = 0; i < bp; i++) {
+			printf("Enter starting location for black pawn #%d [x y]: ", i);
+			scanf("%d %d", &bpos[i].x, &bpos[i].y);
+		}
+		boardstate_init(&board, wp, bp, bw, bh, wpos, bpos);
+	} else {
+		Square wpos[4] = {
+			{3, 0}, {0, 3}, {0,6}, {3, 9}
+		};
+		Square bpos[4] = {
+			{6, 0}, {9, 3}, {9, 6}, {6, 9}
+		};
+		boardstate_init(&board, 4, 4, 10, 10, wpos, bpos);
+	}
 	SquareState currentPlayer = WHITE;
 	while (playerHasValidMove(&board, currentPlayer)) {
+		printf("------\n\n");
+		if (currentPlayer == WHITE) {
+			printf("White to move\n");
+		} else {
+			printf("Black to move\n");
+		}
 		printBoard(&board);
 		int x0, y0, x1, y1, xs, ys;
 		printf("Enter amazon position [x y]: ");
