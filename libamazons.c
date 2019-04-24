@@ -15,6 +15,10 @@
 
 #include "libamazons.h"
 
+void swapPlayer(SquareState* player) {
+	*player = *player == WHITE ? BLACK : WHITE;
+}
+
 int cmp(int a, int b) {
 	if (a == b) {
 		return 0;
@@ -119,7 +123,7 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 	return 0;
 }
 
-int move(BoardState* board, Square* src, Square* dst) {
+int amazons_move(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}
@@ -128,7 +132,7 @@ int move(BoardState* board, Square* src, Square* dst) {
 	return 1;
 }
 
-int shoot(BoardState* board, Square* src, Square* dst) {
+int amazons_shoot(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}

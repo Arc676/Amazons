@@ -38,10 +38,6 @@ void printBoard(BoardState* board) {
 	}
 }
 
-void swapPlayer(SquareState* player) {
-	*player = *player == WHITE ? BLACK : WHITE;
-}
-
 int main(int argc, char* argv[]) {
 	printf("Game of the Amazons! Available under GPLv3.\n");
 	BoardState board;
@@ -91,12 +87,12 @@ int main(int argc, char* argv[]) {
 		printf("Enter shot square [x y]: ");
 		scanf("%d %d", &xs, &ys);
 		Square shot = { xs, ys };
-		if (move(&board, &src, &dst)) {
-			if (shoot(&board, &dst, &shot)) {
+		if (amazons_move(&board, &src, &dst)) {
+			if (amazons_shoot(&board, &dst, &shot)) {
 				swapPlayer(&currentPlayer);
 			} else {
 				printf("Invalid shot\n");
-				move(&board, &dst, &src);
+				amazons_move(&board, &dst, &src);
 			}
 		} else {
 			printf("Invalid move\n");
