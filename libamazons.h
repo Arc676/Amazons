@@ -24,9 +24,9 @@
  */
 typedef enum SquareState {
 	EMPTY = 0,
-	ARROW,
-	WHITE,
-	BLACK
+	ARROW = 1,
+	WHITE = 2,
+	BLACK = 4
 } SquareState;
 
 /**

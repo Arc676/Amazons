@@ -107,6 +107,9 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 	if (!isValidSquare(board, src) || !isValidSquare(board, dst)) {
 		return 0;
 	}
+	if ((board->board[src->x * board->boardWidth + src->y] & (WHITE | BLACK)) == 0) {
+		return 0;
+	}
 	if (src->x == dst->x && src->y == dst->y) {
 		return 0;
 	}

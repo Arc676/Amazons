@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 		printf("Enter shot square [x y]: ");
 		scanf("%d %d", &xs, &ys);
 		Square shot = { xs, ys };
-		if (amazons_move(&board, &src, &dst)) {
+		if (board.board[x0 * board.boardWidth + y0] == currentPlayer && amazons_move(&board, &src, &dst)) {
 			if (amazons_shoot(&board, &dst, &shot)) {
 				swapPlayer(&currentPlayer);
 			} else {
