@@ -36,13 +36,15 @@ typedef struct Square {
 	int x, y;
 } Square;
 
+int cmp(int a, int b);
+
 void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* whiteStart, Square* blackStart);
 
 void boardstate_free(BoardState* board);
 
 int hasValidMove(BoardState* board, Square* square);
 
-int playerHasValidMoves(BoardState* board, SquareState player);
+int playerHasValidMove(BoardState* board, SquareState player);
 
 int pathUnobstructed(BoardState* board, Square* src, Square* dst);
 

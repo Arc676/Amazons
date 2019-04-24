@@ -1,0 +1,5 @@
+.*
+amazons
+*.a
+*.o
+*.ignore

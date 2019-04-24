@@ -15,6 +15,16 @@
 
 #include "libamazons.h"
 
+int cmp(int a, int b) {
+	if (a == b) {
+		return 0;
+	}
+	if (a < b) {
+		return -1;
+	}
+	return 1;
+}
+
 void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* whiteStart, Square* blackStart) {
 	board->whitePieces = wp;
 	board->blackPieces = bp;
@@ -50,7 +60,7 @@ int hasValidMove(BoardState* board, Square* square) {
 	return 0;
 }
 
-int playerHasValidMoves(BoardState* board, SquareState player) {
+int playerHasValidMove(BoardState* board, SquareState player) {
 	if (player != WHITE && player != BLACK) {
 		return 0;
 	}
@@ -71,8 +81,8 @@ int playerHasValidMoves(BoardState* board, SquareState player) {
 }
 
 int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
-	int dx = src->x < dst->x ? 1 : -1;
-	int dy = src->y < dst->y ? 1 : -1;
+	int dx = cmp(dst->x, src->x);
+	int dy = cmp(dst->y, src->y);
 	int x = src->x + dx;
 	int y = src->y + dy;
 	while (x != dst->x && y != dst->y) {
