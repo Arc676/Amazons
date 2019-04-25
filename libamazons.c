@@ -51,9 +51,10 @@ void boardstate_free(BoardState* board) {
 }
 
 int hasValidMove(BoardState* board, Square* square) {
-	for (int x = square->x - 1; x < square->x + 2; x++) {
-		for (int y = square->y - 1; y < square->y + 2; y++) {
-			if (x < 0 || x >= board->boardWidth || y < 0 || y >= board->boardHeight || (x == square->x && y == square->y)) {
+	for (int x = square->x - 1; x <= square->x + 1; x++) {
+		for (int y = square->y - 1; y <= square->y + 1; y++) {
+			Square sq = {x, y};
+			if (!isValidSquare(&sq)) {
 				continue;
 			}
 			if (board->board[x * board->boardWidth + y] == EMPTY) {
@@ -65,18 +66,21 @@ int hasValidMove(BoardState* board, Square* square) {
 }
 
 int playerHasValidMove(BoardState* board, SquareState player) {
-	if (player != WHITE && player != BLACK) {
+	if ((player & (WHITE | BLACK)) == 0) {
 		return 0;
 	}
 	int piecesChecked = 0;
 	int totalPieces = player == WHITE ? board->whitePieces : board->blackPieces;
-	for (int x = 0; x < board->boardWidth && piecesChecked < totalPieces; x++) {
-		for (int y = 0; y < board->boardHeight && piecesChecked < totalPieces; y++) {
+	for (int x = 0; x < board->boardWidth; x++) {
+		for (int y = 0; y < board->boardHeight; y++) {
 			if (board->board[x * board->boardWidth + y] == player) {
-				piecesChecked++;
 				Square square = {x, y};
 				if (hasValidMove(board, &square)) {
 					return 1;
+				}
+				piecesChecked++;
+				if (piecesChecked >= totalPieces) {
+					return 0;
 				}
 			}
 		}
@@ -92,7 +96,7 @@ int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
 	int dy = cmp(dst->y, src->y);
 	int x = src->x + dx;
 	int y = src->y + dy;
-	while (x != dst->x && y != dst->y) {
+	while (x != dst->x || y != dst->y) {
 		if (board->board[x * board->boardWidth + y] != EMPTY) {
 			return 0;
 		}
@@ -119,11 +123,10 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 	if ((src->x == dst->x) ^ (src->y == dst->y)) {
 		return pathUnobstructed(board, src, dst);;
 	}
-	int dx = dst->x - src->x;
-	dx = dx > 0 ? dx : -dx;
-	int dy = dst->y - src->y;
-	dy = dy > 0 ? dy : -dy;
-	if (dx == dy) {
+	int dx = cmp(dst->x, src->x);
+	int dy = cmp(dst->y, src->y);
+	// Square displacement to get absolute value
+	if (dx * dx == dy * dy) {
 		return pathUnobstructed(board, src, dst);;
 	}
 	return 0;
