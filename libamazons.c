@@ -85,6 +85,9 @@ int playerHasValidMove(BoardState* board, SquareState player) {
 }
 
 int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
+	if (board->board[dst->x * board->boardWidth + dst->y] != EMPTY) {
+		return 0;
+	}
 	int dx = cmp(dst->x, src->x);
 	int dy = cmp(dst->y, src->y);
 	int x = src->x + dx;
