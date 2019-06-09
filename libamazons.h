@@ -19,6 +19,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Represents the possible states of a square on the board
  */
@@ -136,5 +140,9 @@ int amazons_move(BoardState* board, Square* src, Square* dst);
  * @return Whether the specified shot is valid
  */
 int amazons_shoot(BoardState* board, Square* src, Square* target);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

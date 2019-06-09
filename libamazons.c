@@ -54,7 +54,7 @@ int hasValidMove(BoardState* board, Square* square) {
 	for (int x = square->x - 1; x <= square->x + 1; x++) {
 		for (int y = square->y - 1; y <= square->y + 1; y++) {
 			Square sq = {x, y};
-			if (!isValidSquare(&sq)) {
+			if (!isValidSquare(board, &sq)) {
 				continue;
 			}
 			if (board->board[x * board->boardWidth + y] == EMPTY) {
