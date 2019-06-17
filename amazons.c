@@ -19,7 +19,7 @@
 void printBoard(BoardState* board) {
 	for (int x = 0; x < board->boardWidth; x++) {
 		for (int y = 0; y < board->boardHeight; y++) {
-			switch (board->board[x * board->boardWidth + y]) {
+			switch (board->board[y * board->boardWidth + x]) {
 			case EMPTY:
 				putchar('.');
 				break;

@@ -1,17 +1,17 @@
-//Copyright (C) 2019 Arc676/Alessandro Vinciguerra
+// Copyright (C) 2019 Arc676/Alessandro Vinciguerra
 
-//This program is free software: you can redistribute it and/or modify
-//it under the terms of the GNU General Public License as published by
-//the Free Software Foundation (version 3)
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation (version 3)
 
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 
-//You should have received a copy of the GNU General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//See README and LICENSE for more details
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// See README and LICENSE for more details
 
 #include "libamazons.h"
 
@@ -38,11 +38,11 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 	memset(board->board, 0, bw * bh * sizeof(SquareState));
 	for (int i = 0; i < wp; i++) {
 		Square sq = whiteStart[i];
-		board->board[sq.x * bw + sq.y] = WHITE;
+		board->board[sq.y * bw + sq.x] = WHITE;
 	}
 	for (int i = 0; i < bp; i++) {
 		Square sq = blackStart[i];
-		board->board[sq.x * bw + sq.y] = BLACK;
+		board->board[sq.y * bw + sq.x] = BLACK;
 	}
 }
 
@@ -57,7 +57,7 @@ int hasValidMove(BoardState* board, Square* square) {
 			if (!isValidSquare(board, &sq)) {
 				continue;
 			}
-			if (board->board[x * board->boardWidth + y] == EMPTY) {
+			if (board->board[y * board->boardWidth + x] == EMPTY) {
 				return 1;
 			}
 		}
@@ -73,7 +73,7 @@ int playerHasValidMove(BoardState* board, SquareState player) {
 	int totalPieces = player == WHITE ? board->whitePieces : board->blackPieces;
 	for (int x = 0; x < board->boardWidth; x++) {
 		for (int y = 0; y < board->boardHeight; y++) {
-			if (board->board[x * board->boardWidth + y] == player) {
+			if (board->board[y * board->boardWidth + x] == player) {
 				Square square = {x, y};
 				if (hasValidMove(board, &square)) {
 					return 1;
@@ -89,7 +89,7 @@ int playerHasValidMove(BoardState* board, SquareState player) {
 }
 
 int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
-	if (board->board[dst->x * board->boardWidth + dst->y] != EMPTY) {
+	if (board->board[dst->y * board->boardWidth + dst->x] != EMPTY) {
 		return 0;
 	}
 	int dx = cmp(dst->x, src->x);
@@ -97,7 +97,7 @@ int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
 	int x = src->x + dx;
 	int y = src->y + dy;
 	while (x != dst->x || y != dst->y) {
-		if (board->board[x * board->boardWidth + y] != EMPTY) {
+		if (board->board[y * board->boardWidth + x] != EMPTY) {
 			return 0;
 		}
 		x += dx;
@@ -114,7 +114,7 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 	if (!isValidSquare(board, src) || !isValidSquare(board, dst)) {
 		return 0;
 	}
-	if ((board->board[src->x * board->boardWidth + src->y] & (WHITE | BLACK)) == 0) {
+	if ((board->board[src->y * board->boardWidth + src->x] & (WHITE | BLACK)) == 0) {
 		return 0;
 	}
 	if (src->x == dst->x && src->y == dst->y) {
@@ -136,8 +136,8 @@ int amazons_move(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}
-	board->board[dst->x * board->boardWidth + dst->y] = board->board[src->x * board->boardWidth + src->y];
-	board->board[src->x * board->boardWidth + src->y] = EMPTY;
+	board->board[dst->y * board->boardWidth + dst->x] = board->board[src->y * board->boardWidth + src->x];
+	board->board[src->y * board->boardWidth + src->x] = EMPTY;
 	return 1;
 }
 
@@ -145,6 +145,6 @@ int amazons_shoot(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}
-	board->board[dst->x * board->boardWidth + dst->y] = ARROW;
+	board->board[dst->y * board->boardWidth + dst->x] = ARROW;
 	return 1;
 }
