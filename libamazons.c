@@ -46,6 +46,16 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 	}
 }
 
+void boardstate_standard(BoardState* board) {
+	Square wpos[4] = {
+		{3, 0}, {0, 3}, {0,6}, {3, 9}
+	};
+	Square bpos[4] = {
+		{6, 0}, {9, 3}, {9, 6}, {6, 9}
+	};
+	boardstate_init(board, 4, 4, 10, 10, wpos, bpos);
+}
+
 void boardstate_free(BoardState* board) {
 	free(board->board);
 }

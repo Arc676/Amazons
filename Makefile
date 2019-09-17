@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS=-std=c11
+FLAGS=-std=c11 -D_XOPEN_SOURCE
 
 LIBOUT=libamazons.a
 EXECOUT=amazons

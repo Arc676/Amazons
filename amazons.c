@@ -14,7 +14,20 @@
 //See README and LICENSE for more details
 
 #include <stdio.h>
+#include <signal.h>
+#include <string.h>
 #include "libamazons.h"
+
+BoardState board;
+
+void quit(int signal) {
+	printf("\nQuitting...\n");
+	fflush(stdout);
+	if (board.board) {
+		boardstate_free(&board);
+	}
+	exit(0);
+}
 
 void printBoard(BoardState* board) {
 	for (int x = 0; x < board->boardWidth; x++) {
@@ -39,8 +52,12 @@ void printBoard(BoardState* board) {
 }
 
 int main(int argc, char* argv[]) {
+	memset(&board, 0, sizeof(board));
+	struct sigaction handler;
+	memset(&handler, 0, sizeof(handler));
+	handler.sa_handler = quit;
+	sigaction(SIGINT, &handler, NULL);
 	printf("Game of the Amazons! Available under GPLv3.\n");
-	BoardState board;
 
 	printf("Use default settings? [Y/n]: ");
 	char def;
@@ -60,13 +77,7 @@ int main(int argc, char* argv[]) {
 		}
 		boardstate_init(&board, wp, bp, bw, bh, wpos, bpos);
 	} else {
-		Square wpos[4] = {
-			{3, 0}, {0, 3}, {0,6}, {3, 9}
-		};
-		Square bpos[4] = {
-			{6, 0}, {9, 3}, {9, 6}, {6, 9}
-		};
-		boardstate_init(&board, 4, 4, 10, 10, wpos, bpos);
+		boardstate_standard(&board);
 	}
 	SquareState currentPlayer = WHITE;
 	while (playerHasValidMove(&board, currentPlayer)) {

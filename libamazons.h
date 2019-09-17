@@ -76,6 +76,12 @@ int cmp(int a, int b);
 void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* whiteStart, Square* blackStart);
 
 /**
+ * Initializes a board with tournament standard configuration
+ * @param board Board state to initialize
+ */
+void boardstate_standard(BoardState* board);
+
+/**
  * Deallocates the memory occupied by a board
  * @param board Board state
  */
