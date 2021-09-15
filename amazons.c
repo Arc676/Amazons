@@ -33,6 +33,7 @@ void printBoard(BoardState* board) {
 	for (int x = 0; x < board->boardWidth; x++) {
 		for (int y = 0; y < board->boardHeight; y++) {
 			switch (board->board[y * board->boardWidth + x]) {
+			default:
 			case EMPTY:
 				putchar('.');
 				break;
@@ -88,6 +89,7 @@ int main(int argc, char* argv[]) {
 			printf("Black to move\n");
 		}
 		printBoard(&board);
+
 		int x0, y0, x1, y1, xs, ys;
 		printf("Enter amazon position [x y]: ");
 		scanf("%d %d", &x0, &y0);
@@ -107,6 +109,38 @@ int main(int argc, char* argv[]) {
 			}
 		} else {
 			printf("Invalid move\n");
+		}
+
+		if (!updateRegionMap(&board)) {
+			int whiteSquares = 0, blackSquares = 0;
+			for (int x = 0; x < board.boardWidth; x++) {
+				for (int y = 0; y < board.boardHeight; y++) {
+					switch (board.map[y * board.boardWidth + x]) {
+					case WHITE:
+						whiteSquares++;
+						break;
+					case BLACK:
+						blackSquares++;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			if (whiteSquares == blackSquares) {
+				printf("Somehow both players control the same number of squares!\n");
+				continue;
+			}
+			printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
+					whiteSquares, blackSquares);
+			// Since the player is swapped outside the loop, set the
+			// current player to the losing player
+			if (whiteSquares > blackSquares) {
+				currentPlayer = BLACK;
+			} else {
+				currentPlayer = WHITE;
+			}
+			break;
 		}
 	}
 	printBoard(&board);
