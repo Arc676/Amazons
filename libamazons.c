@@ -107,12 +107,14 @@ void fillRegion(BoardState* board, CheckState* visited, SquareState controller) 
 	}
 }
 
-void updateRegionMap(BoardState* board) {
+int updateRegionMap(BoardState* board) {
 	int bw = board->boardWidth;
 	int bh = board->boardHeight;
 	CheckState visited[bh * bw];
 	memset(visited, 0, bh * bw * sizeof(CheckState));
+
 	SquareState* map = board->map;
+	int hasDisputedRegions = 0;
 
 	for (int x = 0; x < bw; x++) {
 		for (int y = 0; y < bh; y++) {
@@ -122,9 +124,12 @@ void updateRegionMap(BoardState* board) {
 				if (control != EMPTY) {
 					fillRegion(board, visited, control);
 				}
+				hasDisputedRegions |= control == SHARED;
 			}
 		}
 	}
+
+	return hasDisputedRegions;
 }
 
 int hasValidMove(BoardState* board, Square* square) {

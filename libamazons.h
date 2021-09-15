@@ -126,8 +126,9 @@ void fillRegion(BoardState* board, CheckState* vis, SquareState c);
 /**
  * Updates the map indicating which player controls which regions of the board
  * @param board Board state to check
+ * @return Whether there are still regions over which to fight
  */
-void updateRegionMap(BoardState* board);
+int updateRegionMap(BoardState* board);
 
 /**
  * Determine whether an Amazon at a given location has any valid moves
