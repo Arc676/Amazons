@@ -34,8 +34,14 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 	board->blackPieces = bp;
 	board->boardWidth = bw;
 	board->boardHeight = bh;
-	board->board = malloc(bw * bh * sizeof(SquareState));
-	memset(board->board, 0, bw * bh * sizeof(SquareState));
+
+	size_t boardSize = bw * bh * sizeof(SquareState);
+	board->board = malloc(boardSize);
+	board->map = malloc(boardSize);
+
+	memset(board->board, 0, boardSize);
+	memset(board->map, 0, boardSize);
+
 	for (int i = 0; i < wp; i++) {
 		Square sq = whiteStart[i];
 		board->board[sq.y * bw + sq.x] = WHITE;
@@ -58,6 +64,67 @@ void boardstate_standard(BoardState* board) {
 
 void boardstate_free(BoardState* board) {
 	free(board->board);
+	free(board->map);
+}
+
+// DFS based on sample code at https://stackoverflow.com/a/53459466/2773311
+SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
+	int idx = y * board->boardWidth + x;
+	visited[idx] = VISITED;
+
+	SquareState controller = board->board[idx];
+
+	if (controller == ARROW) {
+		visited[idx] = ASSIGNED;
+		board->map[idx] = ARROW;
+		return EMPTY;
+	}
+
+	for (int x1 = x - 1; x1 <= x + 1; x1++) {
+		for (int y1 = y - 1; y1 <= y + 1; y1++) {
+			Square sq = {x1, y1};
+			int idx1 = y1 * board->boardWidth + x1;
+			if (isValidSquare(board, &sq) && visited[idx1] == UNCHECKED) {
+				controller |= dfs(board, visited, x1, y1);
+			}
+		}
+	}
+
+	return controller;
+}
+
+void fillRegion(BoardState* board, CheckState* visited, SquareState controller) {
+	int bw = board->boardWidth;
+	int bh = board->boardHeight;
+	for (int x = 0; x < bw; x++) {
+		for (int y = 0; y < bh; y++) {
+			int idx = y * bw + x;
+			if (visited[idx] == VISITED) {
+				board->map[idx] = controller;
+				visited[idx] = ASSIGNED;
+			}
+		}
+	}
+}
+
+void updateRegionMap(BoardState* board) {
+	int bw = board->boardWidth;
+	int bh = board->boardHeight;
+	CheckState visited[bh * bw];
+	memset(visited, 0, bh * bw * sizeof(CheckState));
+	SquareState* map = board->map;
+
+	for (int x = 0; x < bw; x++) {
+		for (int y = 0; y < bh; y++) {
+			int idx = y * bw + x;
+			if (!visited[idx] && (map[idx] == SHARED || map[idx] == EMPTY)) {
+				SquareState control = dfs(board, visited, x, y);
+				if (control != EMPTY) {
+					fillRegion(board, visited, control);
+				}
+			}
+		}
+	}
 }
 
 int hasValidMove(BoardState* board, Square* square) {

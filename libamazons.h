@@ -24,22 +24,39 @@ extern "C" {
 #endif
 
 /**
- * Represents the possible states of a square on the board
+ * Represents the possible states of a square on the board;
+ * an additional state is used to represent a region of the board
+ * that is controlled by both players
  */
 typedef enum SquareState {
 	EMPTY = 0,
 	ARROW = 1,
 	WHITE = 2,
-	BLACK = 4
+	BLACK = 4,
+	SHARED = 6
 } SquareState;
 
 /**
+ * Utility enum for representing the state of squares on the board
+ * during a flood fill used to determine who controls which region
+ * on the board
+ */
+typedef enum CheckState {
+	UNCHECKED = 0,
+	VISITED   = 1,
+	ASSIGNED  = 2
+} CheckState;
+
+/**
  * Represents the board state of an ongoing game
+ * (number of pieces for each player, board size,
+ * board state, and regions controlled by each player)
  */
 typedef struct BoardState {
 	int whitePieces, blackPieces;
 	int boardWidth, boardHeight;
 	SquareState* board;
+	SquareState* map;
 } BoardState;
 
 /**
@@ -86,6 +103,31 @@ void boardstate_standard(BoardState* board);
  * @param board Board state
  */
 void boardstate_free(BoardState* board);
+
+/**
+ * Recursive depth-first search utility function for determining who controls
+ * a region on the board containing a given square
+ * @param board Board state to check
+ * @param vis Visitation status for each square
+ * @param x X coordinate of next square to check
+ * @param y Y coordinate of next square to check
+ * @return Who controls the region containing at least the square provided in the root call
+ */
+SquareState dfs(BoardState* board, CheckState* vis, int x, int y);
+
+/**
+ * Assigns the most recently visited region to a player (or both players)
+ * @param board Board state in which to assign the region
+ * @param vis State of square visitation by DFS
+ * @param c Player(s) to which to assign all squares where vis is VISITED
+ */
+void fillRegion(BoardState* board, CheckState* vis, SquareState c);
+
+/**
+ * Updates the map indicating which player controls which regions of the board
+ * @param board Board state to check
+ */
+void updateRegionMap(BoardState* board);
 
 /**
  * Determine whether an Amazon at a given location has any valid moves
