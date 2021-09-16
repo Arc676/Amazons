@@ -19,6 +19,10 @@ B........B
 ...B..B...
 ```
 
+We can say that a region is _controlled_ by a player if it is entirely closed off from the rest of the board by arrows and only contains Amazons belonging to that player. Only the controlling player can affect this region because Amazons belonging to the opponent cannot enter it. Regions not controlled by either player are _undecided_. However, a region can contain Amazons belonging to both players and still be decided, namely if neither player has legal moves in that region. This is the case when an enclosed region is entirely filled with Amazons and arrows, leaving no empty squares. In the source code, these are referred to as _shared_ regions. The game can continue as long as there is at least one undecided region on the board. If the entire board consists of shared regions or regions controlled by a single player, then the result of the game is also decided: as long as neither player makes a blunder by cutting themselves off from an area in a region they themselves control, then whichever player controls more squares will eventually win because their opponent will exhaust their supply of empty squares first.
+
+The library provides region tracking functionality and the frontend will terminate the game if the result is entirely decided by region control.
+
 For more details about the game, see [the Wikipedia page](https://en.wikipedia.org/wiki/Game_of_the_Amazons).
 
 ## Licensing
