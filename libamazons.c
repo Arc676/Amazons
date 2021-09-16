@@ -226,13 +226,13 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 		return 0;
 	}
 	if ((src->x == dst->x) ^ (src->y == dst->y)) {
-		return pathUnobstructed(board, src, dst);;
+		return pathUnobstructed(board, src, dst);
 	}
 	int dx = cmp(dst->x, src->x);
 	int dy = cmp(dst->y, src->y);
 	// Square displacement to get absolute value
 	if (dx * dx == dy * dy) {
-		return pathUnobstructed(board, src, dst);;
+		return pathUnobstructed(board, src, dst);
 	}
 	return 0;
 }
