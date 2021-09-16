@@ -71,6 +71,10 @@ SquareState boardstate_squareState(BoardState* board, Square* square) {
 	return board->board[square->y * board->boardWidth + square->x];
 }
 
+SquareState boardstate_squareController(BoardState* board, Square* square) {
+	return board->map[square->y * board->boardWidth + square->x];
+}
+
 // DFS based on sample code at https://stackoverflow.com/a/53459466/2773311
 SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
 	int idx = y * board->boardWidth + x;

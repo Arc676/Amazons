@@ -113,6 +113,15 @@ void boardstate_free(BoardState* board);
 SquareState boardstate_squareState(BoardState* board, Square* square);
 
 /**
+ * Determines who controls the region containing a given square on the board;
+ * the map should be updated before calling this function
+ * @param board Board state to check
+ * @param square Square to check
+ * @return The controller of the region containing the given square
+ */
+SquareState boardstate_squareController(BoardState* board, Square* square);
+
+/**
  * Recursive depth-first search utility function for determining who controls
  * a region on the board containing a given square
  * @param board Board state to check
