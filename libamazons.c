@@ -132,6 +132,25 @@ int updateRegionMap(BoardState* board) {
 	return hasDisputedRegions;
 }
 
+void countControlledSquares(BoardState* board, int* white, int* black) {
+	*white = 0;
+	*black = 0;
+	for (int x = 0; x < board->boardWidth; x++) {
+		for (int y = 0; y < board->boardHeight; y++) {
+			switch (board->map[y * board->boardWidth + x]) {
+			case WHITE:
+				(*white)++;
+				break;
+			case BLACK:
+				(*black)++;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
 int hasValidMove(BoardState* board, Square* square) {
 	for (int x = square->x - 1; x <= square->x + 1; x++) {
 		for (int y = square->y - 1; y <= square->y + 1; y++) {

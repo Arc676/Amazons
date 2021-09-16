@@ -131,6 +131,15 @@ void fillRegion(BoardState* board, CheckState* vis, SquareState c);
 int updateRegionMap(BoardState* board);
 
 /**
+ * Determines the number of squares controlled by each player; the map
+ * should be updated before calling this function
+ * @param board Board state to check
+ * @param white Where to store the number of squares controlled by white
+ * @param black Where to store the number of squares controlled by black
+ */
+void countControlledSquares(BoardState* board, int* white, int* black);
+
+/**
  * Determine whether an Amazon at a given location has any valid moves
  * @param board Board state
  * @param square Location to check

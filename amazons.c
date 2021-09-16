@@ -113,20 +113,7 @@ int main(int argc, char* argv[]) {
 
 		if (!updateRegionMap(&board)) {
 			int whiteSquares = 0, blackSquares = 0;
-			for (int x = 0; x < board.boardWidth; x++) {
-				for (int y = 0; y < board.boardHeight; y++) {
-					switch (board.map[y * board.boardWidth + x]) {
-					case WHITE:
-						whiteSquares++;
-						break;
-					case BLACK:
-						blackSquares++;
-						break;
-					default:
-						break;
-					}
-				}
-			}
+			countControlledSquares(&board, &whiteSquares, &blackSquares);
 			if (whiteSquares == blackSquares) {
 				printf("Somehow both players control the same number of squares!\n");
 				continue;
