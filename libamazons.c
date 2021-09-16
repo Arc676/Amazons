@@ -40,7 +40,11 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 	board->map = malloc(boardSize);
 
 	memset(board->board, 0, boardSize);
-	memset(board->map, 0, boardSize);
+	for (int x = 0; x < bw; x++) {
+		for (int y = 0; y < bh; y++) {
+			board->map[y * bw + x] = UNDECIDED;
+		}
+	}
 
 	for (int i = 0; i < wp; i++) {
 		Square sq = whiteStart[i];
@@ -82,10 +86,19 @@ SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
 
 	SquareState controller = board->board[idx];
 
+	// If an arrow is encountered, stop searching in this direction
 	if (controller == ARROW) {
 		visited[idx] = ASSIGNED;
 		board->map[idx] = ARROW;
 		return EMPTY;
+	}
+
+	// Check if a player can move in the region
+	if (controller & (BLACK | WHITE)) {
+		Square sq = { x, y };
+		if (hasValidMove(board, &sq)) {
+			controller |= HAS_MOVES;
+		}
 	}
 
 	for (int x1 = x - 1; x1 <= x + 1; x1++) {
@@ -127,12 +140,18 @@ int updateRegionMap(BoardState* board) {
 	for (int x = 0; x < bw; x++) {
 		for (int y = 0; y < bh; y++) {
 			int idx = y * bw + x;
-			if (!visited[idx] && (map[idx] == SHARED || map[idx] == EMPTY)) {
+			if (!visited[idx] && map[idx] == UNDECIDED) {
 				SquareState control = dfs(board, visited, x, y);
+				// If only one player is present in the region, it
+				// doesn't matter if that player has further moves to make
+				// (Logical XOR see https://stackoverflow.com/a/1596970/2773311)
+				if (!(control & BLACK) != !(control & WHITE)) {
+					control &= ~HAS_MOVES;
+				}
 				if (control != EMPTY) {
 					fillRegion(board, visited, control);
 				}
-				hasDisputedRegions |= control == SHARED;
+				hasDisputedRegions |= control == UNDECIDED;
 			}
 		}
 	}
@@ -166,6 +185,8 @@ int hasValidMove(BoardState* board, Square* square) {
 			if (!isValidSquare(board, &sq)) {
 				continue;
 			}
+			// We only have to check that a single neighboring cell is empty
+			// because the arrow can always be fired towards the original square
 			if (boardstate_squareState(board, &sq) == EMPTY) {
 				return 1;
 			}

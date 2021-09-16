@@ -25,15 +25,20 @@ extern "C" {
 
 /**
  * Represents the possible states of a square on the board;
- * an additional state is used to represent a region of the board
- * that is controlled by both players
+ * additional states are used to represent regions of the board
+ * that are controlled by both players
  */
 typedef enum SquareState {
-	EMPTY = 0,
-	ARROW = 1,
-	WHITE = 2,
-	BLACK = 4,
-	SHARED = 6
+	// States visible to humans
+	EMPTY     = 0,
+	ARROW     = 1,
+	WHITE     = 2,
+	BLACK     = 4,
+
+	// DFS utility states
+	SHARED    = 6,  // Both players present but neither can move
+	HAS_MOVES = 8,  // There is an Amazon in the region which can still move
+	UNDECIDED = 14  // There are still moves to be made in this shared region
 } SquareState;
 
 /**
