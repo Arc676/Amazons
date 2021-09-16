@@ -105,6 +105,14 @@ void boardstate_standard(BoardState* board);
 void boardstate_free(BoardState* board);
 
 /**
+ * Determines the state of a given square on the board
+ * @param board Board state to check
+ * @param square Square to check
+ * @return The state of the given square
+ */
+SquareState boardstate_squareState(BoardState* board, Square* square);
+
+/**
  * Recursive depth-first search utility function for determining who controls
  * a region on the board containing a given square
  * @param board Board state to check
