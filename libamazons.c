@@ -162,7 +162,7 @@ int hasValidMove(BoardState* board, Square* square) {
 			if (!isValidSquare(board, &sq)) {
 				continue;
 			}
-			if (board->board[y * board->boardWidth + x] == EMPTY) {
+			if (boardstate_squareState(board, &sq) == EMPTY) {
 				return 1;
 			}
 		}
@@ -178,8 +178,8 @@ int playerHasValidMove(BoardState* board, SquareState player) {
 	int totalPieces = player == WHITE ? board->whitePieces : board->blackPieces;
 	for (int x = 0; x < board->boardWidth; x++) {
 		for (int y = 0; y < board->boardHeight; y++) {
-			if (board->board[y * board->boardWidth + x] == player) {
-				Square square = {x, y};
+			Square square = {x, y};
+			if (boardstate_squareState(board, &square) == player) {
 				if (hasValidMove(board, &square)) {
 					return 1;
 				}
@@ -194,7 +194,7 @@ int playerHasValidMove(BoardState* board, SquareState player) {
 }
 
 int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
-	if (board->board[dst->y * board->boardWidth + dst->x] != EMPTY) {
+	if (boardstate_squareState(board, dst) != EMPTY) {
 		return 0;
 	}
 	int dx = cmp(dst->x, src->x);
@@ -219,7 +219,7 @@ int isValidMove(BoardState* board, Square* src, Square* dst) {
 	if (!isValidSquare(board, src) || !isValidSquare(board, dst)) {
 		return 0;
 	}
-	if ((board->board[src->y * board->boardWidth + src->x] & (WHITE | BLACK)) == 0) {
+	if ((boardstate_squareState(board, src) & (WHITE | BLACK)) == 0) {
 		return 0;
 	}
 	if (src->x == dst->x && src->y == dst->y) {
@@ -241,7 +241,7 @@ int amazons_move(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}
-	board->board[dst->y * board->boardWidth + dst->x] = board->board[src->y * board->boardWidth + src->x];
+	board->board[dst->y * board->boardWidth + dst->x] = boardstate_squareState(board, src);
 	board->board[src->y * board->boardWidth + src->x] = EMPTY;
 	return 1;
 }
