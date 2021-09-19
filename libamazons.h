@@ -155,14 +155,14 @@ SquareState dfs(BoardState* board, CheckState* vis, int x, int y);
  * @param vis State of square visitation by DFS
  * @param c Player(s) to which to assign all squares where vis is VISITED
  */
-void fillRegion(BoardState* board, CheckState* vis, SquareState c);
+void boardstate_fillRegion(BoardState* board, CheckState* vis, SquareState c);
 
 /**
  * Updates the map indicating which player controls which regions of the board
  * @param board Board state to check
  * @return Whether there are still regions over which to fight
  */
-int updateRegionMap(BoardState* board);
+int boardstate_updateRegionMap(BoardState* board);
 
 /**
  * Determines the number of squares controlled by each player; the map
@@ -171,7 +171,7 @@ int updateRegionMap(BoardState* board);
  * @param white Where to store the number of squares controlled by white
  * @param black Where to store the number of squares controlled by black
  */
-void countControlledSquares(BoardState* board, int* white, int* black);
+void boardstate_countControlledSquares(BoardState* board, int* white, int* black);
 
 /**
  * Determine whether an Amazon at a given location has any valid moves

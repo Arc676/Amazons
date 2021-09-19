@@ -133,7 +133,7 @@ SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
 	return controller;
 }
 
-void fillRegion(BoardState* board, CheckState* visited, SquareState controller) {
+void boardstate_fillRegion(BoardState* board, CheckState* visited, SquareState controller) {
 	int bw = board->boardWidth;
 	int bh = board->boardHeight;
 	for (int x = 0; x < bw; x++) {
@@ -147,7 +147,7 @@ void fillRegion(BoardState* board, CheckState* visited, SquareState controller) 
 	}
 }
 
-int updateRegionMap(BoardState* board) {
+int boardstate_updateRegionMap(BoardState* board) {
 	int bw = board->boardWidth;
 	int bh = board->boardHeight;
 	CheckState visited[bh * bw];
@@ -168,7 +168,7 @@ int updateRegionMap(BoardState* board) {
 					control &= ~HAS_MOVES;
 				}
 				if (control != EMPTY) {
-					fillRegion(board, visited, control);
+					boardstate_fillRegion(board, visited, control);
 				}
 				hasDisputedRegions |= control == UNDECIDED;
 			}
@@ -178,7 +178,7 @@ int updateRegionMap(BoardState* board) {
 	return hasDisputedRegions;
 }
 
-void countControlledSquares(BoardState* board, int* white, int* black) {
+void boardstate_countControlledSquares(BoardState* board, int* white, int* black) {
 	*white = 0;
 	*black = 0;
 	for (int x = 0; x < board->boardWidth; x++) {
