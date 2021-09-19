@@ -73,6 +73,23 @@ void boardstate_free(BoardState* board) {
 	free(board->map);
 }
 
+SquareState boardstate_winner(BoardState* board, int* white, int* black) {
+	if (!boardstate_updateRegionMap(board)) {
+		boardstate_countControlledSquares(board, white, black);
+		if (*white == *black) {
+			// If both players control the same number of squares, then the
+			// current player wins because the other player will exhaust
+			// their free squares first
+			return board->currentPlayer;
+		} else if (*white < *black) {
+			return BLACK;
+		} else {
+			return WHITE;
+		}
+	}
+	return EMPTY;
+}
+
 SquareState boardstate_squareState(BoardState* board, Square* square) {
 	return board->board[square->y * board->boardWidth + square->x];
 }

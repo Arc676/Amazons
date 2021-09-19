@@ -99,38 +99,27 @@ int main(int argc, char* argv[]) {
 		printf("Enter shot square [x y]: ");
 		scanf("%d %d", &xs, &ys);
 		Square shot = { xs, ys };
-		if (boardstate_squareState(&board, &src) == board.currentPlayer && amazons_move(&board, &src, &dst)) {
+		if (boardstate_squareState(&board, &src) == board.currentPlayer
+				&& amazons_move(&board, &src, &dst)) {
 			if (amazons_shoot(&board, &dst, &shot)) {
+				int whiteSquares = 0, blackSquares = 0;
+				SquareState winner = boardstate_winner(&board, &whiteSquares, &blackSquares);
+				if (winner != EMPTY) {
+					board.currentPlayer = winner;
+					// Player is swapped again outside of loop
+					swapPlayer(&(board.currentPlayer));
+					printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
+							whiteSquares, blackSquares);
+					break;
+				}
+
 				swapPlayer(&(board.currentPlayer));
 			} else {
 				printf("Invalid shot\n");
 				amazons_move(&board, &dst, &src);
-				continue;
 			}
 		} else {
 			printf("Invalid move\n");
-			continue;
-		}
-
-		if (!updateRegionMap(&board)) {
-			int whiteSquares = 0, blackSquares = 0;
-			countControlledSquares(&board, &whiteSquares, &blackSquares);
-			if (whiteSquares == blackSquares) {
-				// If both players control the same number of squares, then the current player wins
-				// because the other player will exhause their free squares first
-				printf("Both players control the same number of squares!\n");
-			} else {
-				printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
-						whiteSquares, blackSquares);
-				// Since the player is swapped outside the loop, set the
-				// current player to the losing player
-				if (whiteSquares > blackSquares) {
-					board.currentPlayer = BLACK;
-				} else {
-					board.currentPlayer = WHITE;
-				}
-			}
-			break;
 		}
 	}
 	printBoard(&board);

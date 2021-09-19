@@ -111,6 +111,17 @@ void boardstate_standard(BoardState* board);
 void boardstate_free(BoardState* board);
 
 /**
+ * Determines whether a player has won the game. This function must be called
+ * while the current player for the board state is still set to the player
+ * who made the last move, not the player who will make the next move
+ * @param board Board state to check
+ * @param white Where to store the number of squares controlled by white
+ * @param black Where to store the number of squares controlled by black
+ * @return The winning player, or EMPTY if neither player has won
+ */
+SquareState boardstate_winner(BoardState* board, int* white, int* black);
+
+/**
  * Determines the state of a given square on the board
  * @param board Board state to check
  * @param square Square to check
