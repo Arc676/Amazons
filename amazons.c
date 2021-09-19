@@ -80,10 +80,9 @@ int main(int argc, char* argv[]) {
 	} else {
 		boardstate_standard(&board);
 	}
-	SquareState currentPlayer = WHITE;
-	while (playerHasValidMove(&board, currentPlayer)) {
+	while (playerHasValidMove(&board, board.currentPlayer)) {
 		printf("------\n\n");
-		if (currentPlayer == WHITE) {
+		if (board.currentPlayer == WHITE) {
 			printf("White to move\n");
 		} else {
 			printf("Black to move\n");
@@ -100,9 +99,9 @@ int main(int argc, char* argv[]) {
 		printf("Enter shot square [x y]: ");
 		scanf("%d %d", &xs, &ys);
 		Square shot = { xs, ys };
-		if (boardstate_squareState(&board, &src) == currentPlayer && amazons_move(&board, &src, &dst)) {
+		if (boardstate_squareState(&board, &src) == board.currentPlayer && amazons_move(&board, &src, &dst)) {
 			if (amazons_shoot(&board, &dst, &shot)) {
-				swapPlayer(&currentPlayer);
+				swapPlayer(&(board.currentPlayer));
 			} else {
 				printf("Invalid shot\n");
 				amazons_move(&board, &dst, &src);
@@ -126,9 +125,9 @@ int main(int argc, char* argv[]) {
 				// Since the player is swapped outside the loop, set the
 				// current player to the losing player
 				if (whiteSquares > blackSquares) {
-					currentPlayer = BLACK;
+					board.currentPlayer = BLACK;
 				} else {
-					currentPlayer = WHITE;
+					board.currentPlayer = WHITE;
 				}
 			}
 			break;
@@ -136,8 +135,8 @@ int main(int argc, char* argv[]) {
 	}
 	printBoard(&board);
 	boardstate_free(&board);
-	swapPlayer(&currentPlayer);
-	if (currentPlayer == WHITE) {
+	swapPlayer(&(board.currentPlayer));
+	if (board.currentPlayer == WHITE) {
 		printf("White wins!\n");
 	} else {
 		printf("Black wins!\n");

@@ -35,6 +35,8 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 	board->boardWidth = bw;
 	board->boardHeight = bh;
 
+	board->currentPlayer = WHITE;
+
 	size_t boardSize = bw * bh * sizeof(SquareState);
 	board->board = malloc(boardSize);
 	board->map = malloc(boardSize);

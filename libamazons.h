@@ -60,6 +60,7 @@ typedef enum CheckState {
 typedef struct BoardState {
 	int whitePieces, blackPieces;
 	int boardWidth, boardHeight;
+	SquareState currentPlayer;
 	SquareState* board;
 	SquareState* map;
 } BoardState;
