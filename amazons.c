@@ -106,26 +106,30 @@ int main(int argc, char* argv[]) {
 			} else {
 				printf("Invalid shot\n");
 				amazons_move(&board, &dst, &src);
+				continue;
 			}
 		} else {
 			printf("Invalid move\n");
+			continue;
 		}
 
 		if (!updateRegionMap(&board)) {
 			int whiteSquares = 0, blackSquares = 0;
 			countControlledSquares(&board, &whiteSquares, &blackSquares);
 			if (whiteSquares == blackSquares) {
-				printf("Somehow both players control the same number of squares!\n");
-				continue;
-			}
-			printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
-					whiteSquares, blackSquares);
-			// Since the player is swapped outside the loop, set the
-			// current player to the losing player
-			if (whiteSquares > blackSquares) {
-				currentPlayer = BLACK;
+				// If both players control the same number of squares, then the current player wins
+				// because the other player will exhause their free squares first
+				printf("Both players control the same number of squares!\n");
 			} else {
-				currentPlayer = WHITE;
+				printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
+						whiteSquares, blackSquares);
+				// Since the player is swapped outside the loop, set the
+				// current player to the losing player
+				if (whiteSquares > blackSquares) {
+					currentPlayer = BLACK;
+				} else {
+					currentPlayer = WHITE;
+				}
 			}
 			break;
 		}
