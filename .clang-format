@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://www.schemastore.org/clang-format.json
+AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
+AllowShortEnumsOnASingleLine: false
+BasedOnStyle: Google
+IndentCaseLabels: false
+IndentWidth: 4
+Language: Cpp
+TabWidth: 4
+UseTab: AlignWithSpaces

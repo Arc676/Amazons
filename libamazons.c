@@ -29,7 +29,8 @@ int cmp(int a, int b) {
 	return 1;
 }
 
-void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* whiteStart, Square* blackStart) {
+void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh,
+                     Square* whiteStart, Square* blackStart) {
 	board->whitePieces = wp;
 	board->blackPieces = bp;
 	board->boardWidth = bw;
@@ -59,12 +60,8 @@ void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* 
 }
 
 void boardstate_standard(BoardState* board) {
-	Square wpos[4] = {
-		{3, 0}, {0, 3}, {0,6}, {3, 9}
-	};
-	Square bpos[4] = {
-		{6, 0}, {9, 3}, {9, 6}, {6, 9}
-	};
+	Square wpos[4] = {{3, 0}, {0, 3}, {0, 6}, {3, 9}};
+	Square bpos[4] = {{6, 0}, {9, 3}, {9, 6}, {6, 9}};
 	boardstate_init(board, 4, 4, 10, 10, wpos, bpos);
 }
 
@@ -114,7 +111,7 @@ SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
 
 	// Check if a player can move in the region
 	if (controller & (BLACK | WHITE)) {
-		Square sq = { x, y };
+		Square sq = {x, y};
 		if (hasValidMove(board, &sq)) {
 			controller |= HAS_MOVES;
 		}
@@ -133,7 +130,8 @@ SquareState dfs(BoardState* board, CheckState* visited, int x, int y) {
 	return controller;
 }
 
-void boardstate_fillRegion(BoardState* board, CheckState* visited, SquareState controller) {
+void boardstate_fillRegion(BoardState* board, CheckState* visited,
+                           SquareState controller) {
 	int bw = board->boardWidth;
 	int bh = board->boardHeight;
 	for (int x = 0; x < bw; x++) {
@@ -178,7 +176,8 @@ int boardstate_updateRegionMap(BoardState* board) {
 	return hasDisputedRegions;
 }
 
-void boardstate_countControlledSquares(BoardState* board, int* white, int* black) {
+void boardstate_countControlledSquares(BoardState* board, int* white,
+                                       int* black) {
 	*white = 0;
 	*black = 0;
 	for (int x = 0; x < board->boardWidth; x++) {
@@ -259,7 +258,8 @@ int pathUnobstructed(BoardState* board, Square* src, Square* dst) {
 }
 
 int isValidSquare(BoardState* board, Square* square) {
-	return square->x >= 0 && square->x < board->boardWidth && square->y >= 0 && square->y < board->boardHeight;
+	return square->x >= 0 && square->x < board->boardWidth && square->y >= 0 &&
+	       square->y < board->boardHeight;
 }
 
 int isValidMove(BoardState* board, Square* src, Square* dst) {
@@ -288,7 +288,8 @@ int amazons_move(BoardState* board, Square* src, Square* dst) {
 	if (!isValidMove(board, src, dst)) {
 		return 0;
 	}
-	board->board[dst->y * board->boardWidth + dst->x] = boardstate_squareState(board, src);
+	board->board[dst->y * board->boardWidth + dst->x] =
+		boardstate_squareState(board, src);
 	board->board[src->y * board->boardWidth + src->x] = EMPTY;
 	return 1;
 }

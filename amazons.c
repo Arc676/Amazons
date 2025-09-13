@@ -13,9 +13,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // See README and LICENSE for more details
 
-#include <stdio.h>
 #include <signal.h>
+#include <stdio.h>
 #include <string.h>
+
 #include "libamazons.h"
 
 BoardState board;
@@ -65,7 +66,9 @@ int main(int argc, char* argv[]) {
 	scanf("%c", &def);
 	if (def == 'n' || def == 'N') {
 		int wp, bp, bw, bh;
-		printf("Enter game properties [white pieces, black pieces, board width, board height]: ");
+		printf(
+			"Enter game properties [white pieces, black pieces, board "
+			"width, board height]: ");
 		scanf("%d %d %d %d", &wp, &bp, &bw, &bh);
 		Square wpos[wp], bpos[bp];
 		for (int i = 0; i < wp; i++) {
@@ -92,24 +95,27 @@ int main(int argc, char* argv[]) {
 		int x0, y0, x1, y1, xs, ys;
 		printf("Enter amazon position [x y]: ");
 		scanf("%d %d", &x0, &y0);
-		Square src = { x0, y0 };
+		Square src = {x0, y0};
 		printf("Enter destination square [x y]: ");
 		scanf("%d %d", &x1, &y1);
-		Square dst = { x1, y1 };
+		Square dst = {x1, y1};
 		printf("Enter shot square [x y]: ");
 		scanf("%d %d", &xs, &ys);
-		Square shot = { xs, ys };
-		if (boardstate_squareState(&board, &src) == board.currentPlayer
-				&& amazons_move(&board, &src, &dst)) {
+		Square shot = {xs, ys};
+		if (boardstate_squareState(&board, &src) == board.currentPlayer &&
+		    amazons_move(&board, &src, &dst)) {
 			if (amazons_shoot(&board, &dst, &shot)) {
 				int whiteSquares = 0, blackSquares = 0;
-				SquareState winner = boardstate_winner(&board, &whiteSquares, &blackSquares);
+				SquareState winner =
+					boardstate_winner(&board, &whiteSquares, &blackSquares);
 				if (winner != EMPTY) {
 					board.currentPlayer = winner;
 					// Player is swapped again outside of loop
 					swapPlayer(&(board.currentPlayer));
-					printf("The board has been divided. White controls %d squares. Black controls %d squares.\n",
-							whiteSquares, blackSquares);
+					printf(
+						"The board has been divided. White controls %d "
+						"squares. Black controls %d squares.\n",
+						whiteSquares, blackSquares);
 					break;
 				}
 

@@ -93,10 +93,13 @@ int cmp(int a, int b);
  * @param bp Number of black/player 2 pieces
  * @param bw Board width
  * @param bh Board height
- * @param whiteStart Array of Squares indicating starting locations for white player/player 1
- * @Param blackStart Array of Squares indicating starting locations for black player/player 2
+ * @param whiteStart Array of Squares indicating starting locations for white
+ * player/player 1
+ * @param blackStart Array of Squares indicating starting locations for black
+ * player/player 2
  */
-void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh, Square* whiteStart, Square* blackStart);
+void boardstate_init(BoardState* board, int wp, int bp, int bw, int bh,
+                     Square* whiteStart, Square* blackStart);
 
 /**
  * Initializes a board with tournament standard configuration
@@ -148,7 +151,8 @@ SquareState boardstate_squareController(BoardState* board, Square* square);
  * @param vis Visitation status for each square
  * @param x X coordinate of next square to check
  * @param y Y coordinate of next square to check
- * @return Who controls the region containing at least the square provided in the root call
+ * @return Who controls the region containing at least the square provided in
+ * the root call
  */
 SquareState dfs(BoardState* board, CheckState* vis, int x, int y);
 
@@ -174,7 +178,8 @@ int boardstate_updateRegionMap(BoardState* board);
  * @param white Where to store the number of squares controlled by white
  * @param black Where to store the number of squares controlled by black
  */
-void boardstate_countControlledSquares(BoardState* board, int* white, int* black);
+void boardstate_countControlledSquares(BoardState* board, int* white,
+                                       int* black);
 
 /**
  * Determine whether an Amazon at a given location has any valid moves
@@ -214,7 +219,8 @@ int isValidSquare(BoardState* board, Square* square);
  * @param board Board state
  * @param src Starting location
  * @param dst Ending location
- * @return Whether the specified squares are on the same row, column, or diagonal
+ * @return Whether the specified squares are on the same row, column, or
+ * diagonal
  */
 int isValidMove(BoardState* board, Square* src, Square* dst);
 
