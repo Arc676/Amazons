@@ -195,6 +195,9 @@ void boardstate_countControlledSquares(BoardState* board, int* white, int* black
 			}
 		}
 	}
+
+	*white -= board->whitePieces;
+	*black -= board->blackPieces;
 }
 
 int hasValidMove(BoardState* board, Square* square) {
